@@ -2,7 +2,6 @@ from django.db import models
 from django.db.models.signals import post_save,post_delete
 from django.dispatch import receiver
 
-from A.accounts.models import Vehicle
 
 
 class Travel(models.Model):
@@ -20,11 +19,11 @@ class TravelDetails(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     price = models.IntegerField()
-    vehicle_id = models.ForeignKey('Vehicle',on_delete=models.CASCADE)
+    vehicle_id = models.ForeignKey('accounts.Vehicle',on_delete=models.CASCADE)
     status = models.BooleanField(default=False)
-    driver_id = models.ForeignKey('Driver_Documents',on_delete=models.CASCADE)
-    distance_id = models.ForeignKey('Distance', on_delete=models.CASCADE)
-
+    driver_id = models.ForeignKey('accounts.Driver_Documents',on_delete=models.CASCADE)
+    # distance_id = models.ForeignKey('Distance', on_delete=models.CASCADE)
+    distance = models.CharField(max_length=200)
 
     def __str__(self):
         return f'{str(self.travel_id)} {self.created}'
@@ -44,12 +43,12 @@ class Distance(models.Model):
 
 class Ticket(models.Model):
     travel_id = models.ForeignKey('Travel',on_delete=models.CASCADE,related_name='tickets')
-    user_id = models.ForeignKey('User',on_delete=models.CASCADE)
+    user_id = models.ForeignKey('accounts.User',on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
     total_price = models.IntegerField(default=0)
 
     def save(self, *args, **kwargs):
-        travel_details = TravelDetails.objects.get(travel=self.travel_id)
+        travel_details = TravelDetails.objects.get(pk=self.travel_id.id)
         self.total_price = travel_details.price * self.quantity
         super().save(*args, **kwargs)
 

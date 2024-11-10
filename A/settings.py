@@ -39,9 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #apps
     'home.apps.HomeConfig',
-    'accounts.apps.AccountsConfig'
-    #package
-    'rest_framework'
+    'accounts.apps.AccountsConfig',
+    #packages
+    'rest_framework',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -81,10 +82,10 @@ WSGI_APPLICATION = 'A.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Ticket_db',
+        'NAME': 'ticket',
         'USER': 'postgres',
         'PASSWORD':'mobin@nooshi2003',
-        'HOST':'127.0.0.1',
+        'HOST':'localhost',
         'PORT':'5432'
     }
 }
@@ -130,3 +131,14 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'accounts.User'
+
+REST_FRAMEWORK = {
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+
+}
